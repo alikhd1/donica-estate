@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+    command: ["python", "fake_data.py"]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=dornicagres
+      - POSTGRES_USER=dornica
+      - POSTGRES_PASSWORD=very_hard_to_guess
+      - POSTGRES_DB=dornica
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+
+  postgres:
+    container_name: "dornicagres"
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: dornica
+      POSTGRES_PASSWORD: very_hard_to_guess
+      POSTGRES_DB: dornica
+
+  pgadmin:
+    image: "dpage/pgadmin4:latest"
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
