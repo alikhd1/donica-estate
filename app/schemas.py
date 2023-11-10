@@ -38,7 +38,7 @@ class UserUpdate(BaseModel):
     email: EmailStr
     DoB: datetime | None
     gender: Gender
-    hashedPassword: str
+    hashedPassword: str | None
 
     @validator('DoB')
     def year_is_after_1940(cls, value: datetime):
@@ -64,18 +64,31 @@ class UserUpdate(BaseModel):
             return get_password_hash(value)
         raise ValueError(f'your password must have these rules: {rules}')
 
+    @validator('userName')
+    def validate_userName_uniques(cls, value):
+        from app.crud import get_user_by_username
+        from app.database import get_db
 
-class Listing(BaseModel):
+        db = get_db().__next__()
+        if get_user_by_username(db, value):
+            raise ValueError('This username already taken!')
+        return value
+
+
+class ReadListing(BaseModel):
     id: int
     type: Type
     availableNow: bool
-    user_id: int
     address: str
     createdAt: datetime
     updatedAt: datetime | None
 
     class Config:
         orm_mode = True
+
+
+class Listing(ReadListing):
+    user_id: int
 
 
 class ListingCreateUpdate(BaseModel):
