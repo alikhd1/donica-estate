@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from .database import Base, engine
+from .database import Base, engine, init_db
 from .routers import users, listings, auth
 from .utils.log import logging_config
 from .utils.middleware import RouterLoggingMiddleware
@@ -40,8 +40,8 @@ async def update_counter():
 
 
 @app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
+async def on_startup():
+    await init_db()
 
 
 app.include_router(auth.router, tags=['Auth'])

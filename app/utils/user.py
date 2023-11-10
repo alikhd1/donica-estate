@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
 from jose import jwt, JWTError
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from app.database import engine
@@ -25,8 +26,8 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    with Session(engine) as session:
-        user = get_user_by_username(session, username=token_data.username)
+    async with AsyncSession(engine) as session:
+        user = await get_user_by_username(session, username=token_data.username)
     if user is None:
         raise credentials_exception
     if await is_in_blacklist(token):

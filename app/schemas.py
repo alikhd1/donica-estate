@@ -33,7 +33,7 @@ class User(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    userName: str
+    userName: str | None
     fullName: str | None = None
     email: EmailStr
     DoB: datetime | None
@@ -67,11 +67,11 @@ class UserUpdate(BaseModel):
     @validator('userName')
     def validate_userName_uniques(cls, value):
         from app.crud import get_user_by_username
-        from app.database import get_db
+        from app.database import get_session
 
-        db = get_db().__next__()
-        if get_user_by_username(db, value):
-            raise ValueError('This username already taken!')
+        db = get_session()
+        # if get_user_by_username(db, value):
+        #     raise ValueError('This username already taken!')
         return value
 
 

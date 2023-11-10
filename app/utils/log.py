@@ -1,3 +1,5 @@
+import sys
+
 logging_config = {
     "version": 1,
     "formatters": {
@@ -12,12 +14,19 @@ logging_config = {
             "class": "logging.FileHandler",
             "formatter": "json",
             "filename": 'app.log',
+        },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "json",
+            "stream": sys.stderr,
         }
     },
     "root": {
         "level": "DEBUG",
         "handlers": [
-            "file"
+            "file",
+            "console"
         ],
         "propagate": True
     }

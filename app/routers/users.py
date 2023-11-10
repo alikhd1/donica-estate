@@ -1,11 +1,12 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import Session
 
 from app import schemas
 from app.crud import update_user
-from app.database import get_db
+from app.database import get_session, engine
 
 from app.schemas import User
 from app.utils.user import get_current_active_user
@@ -33,7 +34,7 @@ async def read_users_me(current_user: Annotated[User, Depends(get_current_active
 @router.put("/me/", response_model=User)
 async def update_profile(current_user: Annotated[User, Depends(get_current_active_user)],
                          user: schemas.UserUpdate,
-                         db: Session = Depends(get_db)):
+                         db: AsyncSession = Depends(get_session)):
     """
     Update the profile of the currently authenticated user.
 
@@ -50,6 +51,6 @@ async def update_profile(current_user: Annotated[User, Depends(get_current_activ
     ### Tags
     - `User`: Endpoints related to user operations.
     """
-    with db as session:
-        user = update_user(session, current_user.id, user)
+    async with AsyncSession(engine) as session:
+        user = await update_user(session, current_user.id, user)
     return user
