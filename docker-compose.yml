@@ -4,7 +4,6 @@ services:
   app:
     build:
       context: .
-    command: ["python", "fake_data.py"]
     ports:
       - "3000:3000"
     depends_on:
@@ -12,7 +11,7 @@ services:
       - postgres
     environment:
       - REDIS_HOST=redis
-      - POSTGRES_HOST=dornicagres
+      - POSTGRES_HOST=postgres
       - POSTGRES_USER=dornica
       - POSTGRES_PASSWORD=very_hard_to_guess
       - POSTGRES_DB=dornica
@@ -23,12 +22,11 @@ services:
       - "6379:6379"
 
   postgres:
-    container_name: "dornicagres"
+#    container_name: "dornicagres"
     image: "postgres:latest"
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_HOST: db
       POSTGRES_USER: dornica
       POSTGRES_PASSWORD: very_hard_to_guess
       POSTGRES_DB: dornica
