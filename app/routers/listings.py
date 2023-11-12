@@ -41,7 +41,7 @@ async def read_listing(listing_id: int, db: Session = Depends(get_session)):
 
 @router.post("/", response_model=schemas.Listing)
 async def create_listing_(current_user: Annotated[User, Depends(get_current_active_user)],
-                          listing: schemas.ListingCreateUpdate,
+                          listing: schemas.ListingCreate,
                           db: Session = Depends(get_session)):
     """
     Create a new listing.
@@ -68,7 +68,7 @@ async def create_listing_(current_user: Annotated[User, Depends(get_current_acti
 async def update_listing_(
         current_user: Annotated[User, Depends(get_current_active_user)],
         listing_id: int,
-        listing_update: schemas.ListingCreateUpdate,
+        listing_update: schemas.ListingUpdate,
         db: Session = Depends(get_session)):
     """
     Update a listing by its ID.

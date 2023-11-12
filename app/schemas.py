@@ -32,7 +32,7 @@ class User(BaseModel):
         orm_mode = True
 
 
-class UserUpdate(BaseModel):
+class UserCreate(BaseModel):
     userName: str | None
     fullName: str | None = None
     email: EmailStr
@@ -75,6 +75,15 @@ class UserUpdate(BaseModel):
         return value
 
 
+class UpdateUser(UserCreate):
+    userName: str | None
+    fullName: str | None
+    email: EmailStr | None
+    DoB: datetime | None
+    gender: Gender | None
+    hashedPassword: str | None
+
+
 class ReadListing(BaseModel):
     id: int
     type: Type
@@ -91,10 +100,16 @@ class Listing(ReadListing):
     user_id: int
 
 
-class ListingCreateUpdate(BaseModel):
+class ListingCreate(BaseModel):
     type: Type
     availableNow: bool
     address: str
+
+
+class ListingUpdate(BaseModel):
+    type: Type | None
+    availableNow: bool | None
+    address: str | None
 
 
 class Token(BaseModel):

@@ -14,7 +14,7 @@ async def insert_fake_data():
 
         if not user_exists:
             fake_users = [
-                models.User(**schemas.UserUpdate(
+                models.User(**schemas.UserCreate(
                     userName="ali",
                     fullName="ali khandi",
                     email="alikhandi@gmail.com",
@@ -22,7 +22,7 @@ async def insert_fake_data():
                     DoB=datetime.utcnow(),
                     gender=schemas.Gender.Male,
                 ).dict()),
-                models.User(**schemas.UserUpdate(
+                models.User(**schemas.UserCreate(
                     userName="fatemeh",
                     fullName="fatemeh ahmadi ",
                     email="fatemeh@gmail.com",
@@ -30,7 +30,7 @@ async def insert_fake_data():
                     DoB=datetime.utcnow(),
                     gender=schemas.Gender.Female,
                 ).dict()),
-                models.User(**schemas.UserUpdate(
+                models.User(**schemas.UserCreate(
                     userName="mohammad",
                     fullName="mohammad mohammadi ",
                     email="mohammad@gmail.com",

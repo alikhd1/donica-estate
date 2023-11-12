@@ -14,7 +14,7 @@ async def get_user_by_username(db: AsyncSession, username: str) -> models.User:
     return result.scalars().first()
 
 
-async def update_user(db: AsyncSession, user_id: int, user: schemas.UserUpdate) -> models.User:
+async def update_user(db: AsyncSession, user_id: int, user: schemas.UserCreate) -> models.User:
     statement = select(models.User).filter(models.User.id == user_id)
     result = await db.execute(statement)
     db_user = result.scalars().first()
@@ -34,7 +34,7 @@ async def get_listing_by_id(db: AsyncSession, id: int) -> models.Listing:
     return result.scalars().first()
 
 
-async def create_listing(db: AsyncSession, user_id: int, listing: schemas.ListingCreateUpdate) -> models.Listing:
+async def create_listing(db: AsyncSession, user_id: int, listing: schemas.ListingCreate) -> models.Listing:
     db_listing = models.Listing(**listing.dict())
     setattr(db_listing, 'user_id', user_id)
 
@@ -44,7 +44,7 @@ async def create_listing(db: AsyncSession, user_id: int, listing: schemas.Listin
     return db_listing
 
 
-async def update_listing(db: AsyncSession, db_listing: models.Listing, listing: schemas.ListingCreateUpdate) -> models.Listing:
+async def update_listing(db: AsyncSession, db_listing: models.Listing, listing: schemas.ListingUpdate) -> models.Listing:
     for field, value in listing.dict(exclude_unset=True).items():
         setattr(db_listing, field, value)
     setattr(db_listing, 'updatedAt', datetime.utcnow())

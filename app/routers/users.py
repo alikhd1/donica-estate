@@ -33,7 +33,7 @@ async def read_users_me(current_user: Annotated[User, Depends(get_current_active
 
 @router.put("/me/", response_model=User)
 async def update_profile(current_user: Annotated[User, Depends(get_current_active_user)],
-                         user: schemas.UserUpdate,
+                         user: schemas.UpdateUser,
                          db: AsyncSession = Depends(get_session)):
     """
     Update the profile of the currently authenticated user.
