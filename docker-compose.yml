@@ -1,12 +1,26 @@
 version: '3'
 
 services:
+  migration:
+    build:
+      context: .
+    depends_on:
+      - postgres
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=dornica
+      - POSTGRES_PASSWORD=very_hard_to_guess
+      - POSTGRES_DB=dornica
+    command: bash -c "alembic upgrade head"
+
   app:
     build:
       context: .
     ports:
       - "3000:3000"
     depends_on:
+      - migration
       - redis
       - postgres
     environment:

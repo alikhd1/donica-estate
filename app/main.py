@@ -6,6 +6,7 @@ from slowapi.errors import RateLimitExceeded
 
 from .database import Base, engine, init_db
 from .routers import users, listings, auth
+from .utils.fake_data import insert_fake_data
 from .utils.log import logging_config
 from .utils.middleware import RouterLoggingMiddleware
 from .utils.throttle import limiter
@@ -41,7 +42,8 @@ async def update_counter():
 
 @app.on_event("startup")
 async def on_startup():
-    await init_db()
+    # await init_db()
+    await insert_fake_data()
 
 
 app.include_router(auth.router, tags=['Auth'])
